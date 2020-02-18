@@ -15,6 +15,8 @@ namespace KERBALISM
 		[KSPField] public double capacity = 1.0;          // amount of associated pseudo-resource
 		[KSPField] public bool toggle = true;             // show the enable/disable toggle button
 
+		[KSPField] public bool disableInEditor = false;   // phasing-out: disable this module when it is loaded in the editor
+
 		// persistence/config
 		// note: the running state doesn't need to be serialized, as it can be deduced from resource flow
 		// but we find useful to set running to true in the cfg node for some processes, and not others
@@ -40,6 +42,13 @@ namespace KERBALISM
 			// don't break tutorial scenarios
 			if (Lib.DisableScenario(this))
 				return;
+
+			if (disableInEditor && Lib.IsEditor())
+			{
+				enabled = false;
+				isEnabled = false;
+				return;
+			}
 
 			// configure on start, must be executed with enabled true on parts first load.
 			Configure(true);
@@ -72,6 +81,13 @@ namespace KERBALISM
 		///<summary> Called by Configure.cs. Configures the controller to settings passed from the configure module</summary>
 		public void Configure(bool enable)
 		{
+			if (disableInEditor && Lib.IsEditor())
+			{
+				enabled = false;
+				isEnabled = false;
+				return;
+			}
+
 			if (enable)
 			{
 				// if never set
