@@ -159,36 +159,24 @@ namespace KERBALISM
 		// action groups
 		[KSPAction("_")] public void Action(KSPActionParam param) { Toggle(); }
 
+		// specifics support
+		public Specifics Specs()
+		{
+			Process process = Profile.processes.Find(k => k.modifiers.Contains(resource));
+			return ModuleKsmProcessController.Specifics(process, capacity);
+		}
+
 		// part tooltip
 		public override string GetInfo()
 		{
-			return isConfigurable ? string.Empty : Specs().Info(desc);
+			if (isConfigurable)
+				return string.Empty;
+
+			return Specs().Info(desc);
 		}
 
 		public bool IsRunning() {
 			return running;
-		}
-
-		// specifics support
-		public Specifics Specs()
-		{
-			Specifics specs = new Specifics();
-			Process process = Profile.processes.Find(k => k.modifiers.Contains(resource));
-			if (process != null)
-			{
-				foreach (KeyValuePair<string, double> pair in process.inputs)
-				{
-					if (!process.modifiers.Contains(pair.Key))
-						specs.Add(pair.Key, Lib.BuildString("<color=#ffaa00>", Lib.HumanReadableRate(pair.Value * capacity), "</color>"));
-					else
-						specs.Add(Local.ProcessController_info1, Lib.HumanReadableDuration(0.5 / pair.Value));//"Half-life"
-				}
-				foreach (KeyValuePair<string, double> pair in process.outputs)
-				{
-					specs.Add(pair.Key, Lib.BuildString("<color=#00ff00>", Lib.HumanReadableRate(pair.Value * capacity), "</color>"));
-				}
-			}
-			return specs;
 		}
 
 		// module info support

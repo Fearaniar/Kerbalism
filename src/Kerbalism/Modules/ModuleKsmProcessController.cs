@@ -217,7 +217,7 @@ namespace KERBALISM
 		// part tooltip
 		public override string GetInfo()
 		{
-			if (string.IsNullOrEmpty(desc))
+			if (string.IsNullOrEmpty(resource))
 				return string.Empty;
 			return Specs().Info(desc);
 		}
