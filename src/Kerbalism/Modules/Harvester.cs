@@ -19,7 +19,10 @@ namespace KERBALISM
 		[KSPField] public double abundance_rate = 0.1;            // abundance level at which rate is specified (10% by default)
 		[KSPField] public double ec_rate = 0.0;                   // rate of ec consumption per-second, irregardless of abundance
 		[KSPField] public string drill = string.Empty;            // the drill head transform
-		[KSPField] public float length = 5f;                    // tolerable distance between drill head and the ground (length of the extendible part)
+		[KSPField] public float length = 5f;                      // tolerable distance between drill head and the ground (length of the extendible part)
+
+		[KSPField] public string id = string.Empty;       // id field for targeting individual modules with B9PS
+		[KSPField] public bool disableInEditor = false;   // phasing-out old configs: disable this module when it is loaded in the editor
 
 		// persistence
 		[KSPField(isPersistant = true)] public bool deployed;     // true if the harvester is deployed
@@ -40,6 +43,13 @@ namespace KERBALISM
 
 		public override void OnStart(StartState state)
 		{
+			if (disableInEditor && Lib.IsEditor())
+			{
+				enabled = false;
+				isEnabled = false;
+				return;
+			}
+
 			// don't break tutorial scenarios
 			if (Lib.DisableScenario(this)) return;
 
@@ -225,6 +235,9 @@ namespace KERBALISM
 		// part tooltip
 		public override string GetInfo()
 		{
+			if(disableInEditor)
+				return string.Empty;
+
 			// generate description
 			string source = string.Empty;
 			switch (type)

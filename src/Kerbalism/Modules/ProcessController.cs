@@ -15,7 +15,7 @@ namespace KERBALISM
 		[KSPField] public double capacity = 1.0;          // amount of associated pseudo-resource
 		[KSPField] public bool toggle = true;             // show the enable/disable toggle button
 
-		[KSPField] public bool disableInEditor = false;   // phasing-out: disable this module when it is loaded in the editor
+		[KSPField] public bool disableInEditor = false;   // phasing-out old configs: disable this module when it is loaded in the editor
 
 		// persistence/config
 		// note: the running state doesn't need to be serialized, as it can be deduced from resource flow
