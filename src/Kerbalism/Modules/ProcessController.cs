@@ -169,6 +169,9 @@ namespace KERBALISM
 		// part tooltip
 		public override string GetInfo()
 		{
+			if (disableInEditor)
+				return string.Empty;
+
 			if (isConfigurable)
 				return string.Empty;
 
